@@ -5,21 +5,28 @@ using UnityEngine.EventSystems;
 
 public class Circle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public GameEvent onClick;
+    public IMessageBroker messageBroker;
 
+    private int _clickCount = 0;
+
+    void OnEnable()
+    {
+        messageBroker = MessageBroker.GetInstance();
+    }
+    
     public void OnPointerClick(PointerEventData eventData)
     {
-        onClick.Raise();
-        //Debug.Log("Clicked!!");
+        _clickCount++;
+        messageBroker.Send<int>(Events.Player.CIRCLE_CLICK, _clickCount);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
-	{
-		//Debug.Log("Enter!!");
-	}
+    {
 
-	public void OnPointerExit(PointerEventData eventData)
-	{
-		//Debug.Log("Exit!!");
-	}
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+
+    }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClickCountLabel : MonoBehaviour
+public class ProgressBar : MonoBehaviour
 {
 
     public IMessageBroker messageBroker;
@@ -22,7 +22,7 @@ public class ClickCountLabel : MonoBehaviour
 
     public void OnCircleClick(int clickCount)
     {
-        var text = GetComponent<Text>();
-        text.text = clickCount.ToString();
+        var slider = GetComponent<Slider>();
+        slider.value = ((float)clickCount) / 100;
     }
 }
