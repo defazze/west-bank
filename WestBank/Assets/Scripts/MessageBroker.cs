@@ -13,11 +13,16 @@ public interface IMessageBroker
     void Send<T>(string eventName, T eventParam);
 }
 
-[CreateAssetMenu]
-public class MessageBroker : ScriptableObject, IMessageBroker
+public class MessageBroker : IMessageBroker
 {
     private Dictionary<string, Action> _subscribes = new Dictionary<string, Action>();
     private Dictionary<string, List<Delegate>> _subscribeWithParam = new Dictionary<string, List<Delegate>>();
+
+    private MessageBroker()
+    {
+
+    }
+    public static MessageBroker Instance { get; } = new MessageBroker();
 
     public void Subscribe(string eventName, Action listener)
     {
@@ -83,13 +88,13 @@ public class MessageBroker : ScriptableObject, IMessageBroker
                 (del as Action<T>).Invoke(eventParam);
         }
     }
+    /*
+        public static MessageBroker GetInstance()
+        {
+            string guid = UnityEditor.AssetDatabase.FindAssets("t:" + typeof(MessageBroker).Name).FirstOrDefault();
+            var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
+            var broker = UnityEditor.AssetDatabase.LoadAssetAtPath<MessageBroker>(path);
 
-    public static MessageBroker GetInstance()
-    {
-        string guid = UnityEditor.AssetDatabase.FindAssets("t:" + typeof(MessageBroker).Name).FirstOrDefault();
-        var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
-        var broker = UnityEditor.AssetDatabase.LoadAssetAtPath<MessageBroker>(path);
-
-        return broker;
-    }
+            return broker;
+        }*/
 }
