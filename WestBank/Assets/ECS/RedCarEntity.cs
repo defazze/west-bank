@@ -14,9 +14,9 @@ public class RedCarEntity : MonoBehaviour, IConvertGameObjectToEntity
     {
         var types = new[] {
             typeof(RenderMesh),
-            typeof(SpeedComponent),
+            typeof(MovementComponent),
             typeof(InputComponent),
-            typeof(AcceleratorComponent)
+            typeof(SpeedComponent)
              };
         var componentTypes = new ComponentTypes(types.Select(t => (ComponentType)t).ToArray());
 

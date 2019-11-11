@@ -7,14 +7,10 @@ public class InputEngine : ComponentSystem
 {
     protected override void OnUpdate()
     {
-        Entities.WithAll<InputComponent>().WithNone<AcceleratorComponent>().ForEach((ref SpeedComponent speedComponent) =>
+        Entities.ForEach((ref InputComponent inputComponent) =>
         {
-            speedComponent.Speed = Input.GetAxis("Vertical");
-        });
-
-        Entities.WithAll<InputComponent>().ForEach((ref AcceleratorComponent acceleratorComponent) =>
-        {
-            acceleratorComponent.Boost = Math.Sign(Input.GetAxis("Vertical"));
+            inputComponent.Vertical = Math.Sign(Input.GetAxis("Vertical"));
+            inputComponent.Horizontal = Math.Sign(Input.GetAxis("Horizontal"));
         });
     }
 }

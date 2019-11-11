@@ -15,8 +15,10 @@ public class BlueCarEntity : MonoBehaviour, IConvertGameObjectToEntity
     {
         var types = new[] {
             typeof(RenderMesh),
-            typeof(SpeedComponent),
-            typeof(InputComponent)
+            typeof(MovementComponent),
+            typeof(RotationComponent),
+            typeof(InputComponent),
+            typeof(SpeedComponent)
             };
             
         var componentTypes = new ComponentTypes(types.Select(t => (ComponentType)t).ToArray());
