@@ -319,7 +319,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 4453076480006138051, guid: f621bca1854a0c47e892110dcea9654d, type: 3}
-  Distance: 1.5
+  Distance: 1.4
+  maxOpenAngle: 270
+  doorRotationSpeed: 0.7
 --- !u!4 &1850967300
 Transform:
   m_ObjectHideFlags: 0

@@ -15,9 +15,10 @@ public class BlueCarEntity : MonoBehaviour, IConvertGameObjectToEntity
             typeof(MovementComponent),
             typeof(RotationComponent),
             typeof(InputComponent),
-            typeof(SelectableComponent)
+            typeof(SelectableComponent),
+            typeof(SelectedComponent)
             };
-            
+
         var componentTypes = new ComponentTypes(types.Select(t => (ComponentType)t).ToArray());
 
         dstManager.AddComponents(entity, componentTypes);
