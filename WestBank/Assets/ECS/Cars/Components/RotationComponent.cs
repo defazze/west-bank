@@ -1,5 +1,15 @@
 using Unity.Entities;
 
-public struct RotationComponent : IComponentData
+namespace Cars
 {
+    public struct RotationComponent : IComponentData
+    {
+    }
+}
+
+namespace Doors
+{
+    public struct RotationComponent : IComponentData
+    {
+    }
 }

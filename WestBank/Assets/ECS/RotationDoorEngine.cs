@@ -1,9 +1,11 @@
 using System;
+using Doors;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+/*
 public class RotationDoorEngine : ComponentSystem
 {
     private float closedAngle = 0;
@@ -45,4 +47,4 @@ public class RotationDoorEngine : ComponentSystem
             }
         });
     }
-}
+}*/

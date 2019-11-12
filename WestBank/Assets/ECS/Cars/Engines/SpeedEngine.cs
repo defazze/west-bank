@@ -11,7 +11,7 @@ public class SpeedEngine : ComponentSystem
     private float maxSpeed = 2f;
     protected override void OnUpdate()
     {
-        Entities.WithAll<SpeedComponent>().ForEach((ref InputComponent input, ref MovementComponent movement) =>
+        Entities.ForEach((ref InputComponent input, ref MovementComponent movement) =>
         {
             var newSpeed = movement.Speed + speedFactor * input.Vertical * Time.deltaTime;
             newSpeed = math.clamp(newSpeed, -1 * maxSpeed, maxSpeed);
