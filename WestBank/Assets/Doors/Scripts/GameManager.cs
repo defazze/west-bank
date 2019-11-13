@@ -13,11 +13,15 @@ namespace Doors
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
-        public GameObject Prefab;
+        public GameObject DoorPrefab;
+        public GameObject BulletHolePrefab;
         public float Distance = 2f;
         public float maxOpenAngle = 270f;
         public float doorRotationSpeed = .7f;
-        private BuildPhysicsWorld physicsWorldSystem = World.Active.GetExistingSystem<BuildPhysicsWorld>();
+
+        private BuildPhysicsWorld physicsWorldSystem;
+        private Entity bulletHoleEntity;
+        private EntityManager entityManager;
         void Awake()
         {
             Instance = this;
@@ -25,13 +29,17 @@ namespace Doors
 
         void Start()
         {
-            var prefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(Prefab, World.Active);
-            var entityManager = World.Active.EntityManager;
+            physicsWorldSystem = World.Active.GetExistingSystem<BuildPhysicsWorld>();
+
+            var doorEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(DoorPrefab, World.Active);
+            bulletHoleEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(BulletHolePrefab, World.Active);
+
+            entityManager = World.Active.EntityManager;
 
 
             for (var x = -1; x <= 1; x++)
             {
-                var instance = entityManager.Instantiate(prefab);
+                var instance = entityManager.Instantiate(doorEntity);
                 var position = transform.TransformPoint(new float3(x * Distance, 1f, 0));
                 entityManager.SetComponentData(instance, new Translation { Value = position });
                 entityManager.AddComponentData(instance, new RotationComponent { Opening = true });
@@ -66,7 +74,12 @@ namespace Doors
                 {
                     // see hit.Position 
                     // see hit.SurfaceNormal
+
                     Entity e = physicsWorldSystem.PhysicsWorld.Bodies[hit.RigidBodyIndex].Entity;
+
+                    var bulletHole = entityManager.Instantiate(bulletHoleEntity);
+                    entityManager.SetComponentData(bulletHole, new Translation { Value = hit.Position });
+                    entityManager.SetComponentData(bulletHole, new Rotation { Value = Quaternion.FromToRotation(Vector3.forward, hit.SurfaceNormal) });
                 }
 
             }
