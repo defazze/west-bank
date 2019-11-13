@@ -39,10 +39,10 @@ namespace Doors
 
             for (var x = -1; x <= 1; x++)
             {
-                var instance = entityManager.Instantiate(doorEntity);
+                var door = entityManager.Instantiate(doorEntity);
                 var position = transform.TransformPoint(new float3(x * Distance, 1f, 0));
-                entityManager.SetComponentData(instance, new Translation { Value = position });
-                entityManager.AddComponentData(instance, new RotationComponent { Opening = true });
+                entityManager.SetComponentData(door, new Translation { Value = position });
+                entityManager.AddComponentData(door, new RotationComponent { Opening = true });
             }
         }
 
@@ -78,8 +78,10 @@ namespace Doors
                     Entity e = physicsWorldSystem.PhysicsWorld.Bodies[hit.RigidBodyIndex].Entity;
 
                     var bulletHole = entityManager.Instantiate(bulletHoleEntity);
-                    entityManager.SetComponentData(bulletHole, new Translation { Value = hit.Position });
+
                     entityManager.SetComponentData(bulletHole, new Rotation { Value = Quaternion.FromToRotation(Vector3.forward, hit.SurfaceNormal) });
+                    entityManager.SetComponentData(bulletHole, new Translation { Value = hit.Position });
+
                 }
 
             }
