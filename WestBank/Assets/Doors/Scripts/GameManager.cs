@@ -14,6 +14,7 @@ namespace Doors
     {
         public static GameManager Instance { get; private set; }
         public GameObject DoorPrefab;
+        public GameObject TestDoorPrefab;
         public GameObject BulletHolePrefab;
         public float Distance = 2f;
         public float maxOpenAngle = 270f;
@@ -44,6 +45,14 @@ namespace Doors
                 entityManager.SetComponentData(door, new Translation { Value = position });
                 entityManager.AddComponentData(door, new RotationComponent { Opening = true });
             }
+
+            var testDoorEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(TestDoorPrefab, World.Active);
+            var testDoor = entityManager.Instantiate(testDoorEntity);
+
+            var testPosition = transform.TransformPoint(new float3(2 * Distance, 1f, 0));
+            var testPivot = (float3)testPosition + new float3(.5f, 0, 0);
+            entityManager.SetComponentData(testDoor, new Translation { Value = testPosition });
+            entityManager.AddComponentData(testDoor, new RotationComponent { Opening = true, IsTest = true, Pivot = testPivot });
         }
 
         void Update()

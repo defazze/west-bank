@@ -9,24 +9,35 @@ public class RotationDoorEngine : ComponentSystem
 {
     protected override void OnUpdate()
     {
-        Entities.ForEach((Entity entity, ref Rotation rotation, ref RotationComponent rotationComponent) =>
+        Entities.ForEach((Entity entity, ref Translation translation, ref Rotation rotation, ref RotationComponent rotationComponent) =>
         {
             if (rotationComponent.Opening)
             {
-                Rotate(ref rotation, ref rotationComponent, true);
+                Rotate(ref translation, ref rotation, ref rotationComponent, true);
             }
 
             if (rotationComponent.Closing)
             {
-                Rotate(ref rotation, ref rotationComponent, false);
+                Rotate(ref translation, ref rotation, ref rotationComponent, false);
             }
         });
     }
 
-    private void Rotate(ref Rotation rotation, ref RotationComponent rotationComponent, bool isOpening)
+    private void Rotate(ref Translation translation, ref Rotation rotation, ref RotationComponent rotationComponent, bool isOpening)
     {
         var direction = isOpening ? -1 : 1;
-        quaternion newRotation = math.mul(rotation.Value, quaternion.RotateY(direction * GameManager.Instance.doorRotationSpeed * Time.deltaTime));
+        var delta = quaternion.RotateY(direction * GameManager.Instance.doorRotationSpeed * Time.deltaTime);
+
+        quaternion newRotation = math.mul(rotation.Value, delta);
+        var position = translation.Value;
+        if (rotationComponent.IsTest)
+        {
+            var pivot = rotationComponent.Pivot;
+            var newPosition = math.mul(delta, position - pivot) + pivot;
+
+            translation.Value = newPosition;
+        }
+
         var angle = ((Quaternion)newRotation).eulerAngles.y;
 
         if (angle > 0 && angle < GameManager.Instance.maxOpenAngle)
