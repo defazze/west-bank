@@ -408,9 +408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833c8e4f284d858aaa8463b7aa0bcb05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DoorPrefab: {fileID: 4453076480006138051, guid: f621bca1854a0c47e892110dcea9654d,
-    type: 3}
-  TestDoorPrefab: {fileID: 803058197346754840, guid: 49a030e7648e2f40a9aa4091ac222c0c,
+  DoorPrefab: {fileID: 803058197346754840, guid: 49a030e7648e2f40a9aa4091ac222c0c,
     type: 3}
   BulletHolePrefab: {fileID: 6476431514152142401, guid: cb426b14d6493a441afe09fc48184cd7,
     type: 3}
@@ -840,7 +838,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2131387670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.6, y: 1.4, z: -4}
+  m_LocalPosition: {x: -0.6, y: 1.4, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

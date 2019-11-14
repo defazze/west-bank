@@ -14,7 +14,6 @@ namespace Doors
     {
         public static GameManager Instance { get; private set; }
         public GameObject DoorPrefab;
-        public GameObject TestDoorPrefab;
         public GameObject BulletHolePrefab;
         public float Distance = 2f;
         public float maxOpenAngle = 270f;
@@ -38,21 +37,18 @@ namespace Doors
             entityManager = World.Active.EntityManager;
 
 
-            for (var x = -1; x <= 1; x++)
+            for (var x = -1.5f; x <= .5f; x++)
             {
                 var door = entityManager.Instantiate(doorEntity);
                 var position = transform.TransformPoint(new float3(x * Distance, 1f, 0));
                 entityManager.SetComponentData(door, new Translation { Value = position });
-                entityManager.AddComponentData(door, new RotationComponent { Opening = true });
+                entityManager.AddComponentData(door, new DoorComponent
+                {
+                    State = DoorState.MustOpen,
+                    OpenTime = 0,
+                    Pivot = (float3)position + new float3(.5f, 0, 0)
+                });
             }
-
-            var testDoorEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(TestDoorPrefab, World.Active);
-            var testDoor = entityManager.Instantiate(testDoorEntity);
-
-            var testPosition = transform.TransformPoint(new float3(2 * Distance, 1f, 0));
-            var testPivot = (float3)testPosition + new float3(.5f, 0, 0);
-            entityManager.SetComponentData(testDoor, new Translation { Value = testPosition });
-            entityManager.AddComponentData(testDoor, new RotationComponent { Opening = true, IsTest = true, Pivot = testPivot });
         }
 
         void Update()
@@ -81,18 +77,15 @@ namespace Doors
                 bool haveHit = collisionWorld.CastRay(input, out hit);
                 if (haveHit)
                 {
-                    // see hit.Position 
-                    // see hit.SurfaceNormal
-
                     Entity e = physicsWorldSystem.PhysicsWorld.Bodies[hit.RigidBodyIndex].Entity;
 
                     var bulletHole = entityManager.Instantiate(bulletHoleEntity);
 
-                    entityManager.SetComponentData(bulletHole, new Rotation { Value = Quaternion.FromToRotation(Vector3.forward, hit.SurfaceNormal) });
+                    var doorRotation = entityManager.GetComponentData<Rotation>(e);
+                    var bulletHoleRotation = new Rotation { Value = Quaternion.FromToRotation(Vector3.back, hit.SurfaceNormal) };
+                    entityManager.SetComponentData(bulletHole, bulletHoleRotation);
                     entityManager.SetComponentData(bulletHole, new Translation { Value = hit.Position });
-
                 }
-
             }
         }
     }
