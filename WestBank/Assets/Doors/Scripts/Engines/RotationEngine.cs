@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Doors
 {
+    [UpdateAfter(typeof(DoorEngine))]
     public class RotationEngine : ComponentSystem
     {
         protected override void OnUpdate()

@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+[UpdateAfter(typeof(ShootEngine))]
 public class DoorEngine : ComponentSystem
 {
     private const float OPEN_PERIOD = 2;
@@ -15,7 +16,9 @@ public class DoorEngine : ComponentSystem
             if (door.State == DoorState.MustOpen)
             {
                 door.State = DoorState.Opening;
+
                 PostUpdateCommands.AddComponent(e, new RotationComponent { Opening = true, Pivot = door.Pivot });
+                AddRotationToBulletHoles(e, new RotationComponent { Opening = true, Pivot = door.Pivot });
             }
 
             if (door.State == DoorState.Open)
@@ -25,12 +28,14 @@ public class DoorEngine : ComponentSystem
                 {
                     door.OpenTime = 0;
                     door.State = DoorState.Closing;
+
                     PostUpdateCommands.AddComponent(e, new RotationComponent { Opening = false, Pivot = door.Pivot });
+                    AddRotationToBulletHoles(e, new RotationComponent { Opening = false, Pivot = door.Pivot });
                 }
             }
         });
 
-        Entities.WithAll<RotationComponent>().ForEach((Entity e, ref DoorComponent door, ref Rotation rotation) =>
+        Entities.WithAll<RotationComponent>().ForEach((Entity e, ref DoorComponent door, ref Rotation rotation, ref RotationComponent rotationComponent) =>
         {
             var angle = ((Quaternion)rotation.Value).eulerAngles.y;
 
@@ -47,6 +52,29 @@ public class DoorEngine : ComponentSystem
                 }
 
                 PostUpdateCommands.RemoveComponent<RotationComponent>(e);
+                Entities.WithAll<RotationComponent>().ForEach((Entity bulletEntity, ref BulletHoleComponent bulletHole) =>
+                {
+                    if (bulletHole.Surface == e)
+                    {
+                        PostUpdateCommands.RemoveComponent<RotationComponent>(bulletEntity);
+                    }
+                });
+            }
+            else
+            {
+                var newRotationComponent = rotationComponent;
+                AddRotationToBulletHoles(e, newRotationComponent);
+            }
+        });
+    }
+
+    private void AddRotationToBulletHoles(Entity door, RotationComponent rotation)
+    {
+        Entities.WithNone<RotationComponent>().ForEach((Entity bulletEntity, ref BulletHoleComponent bulletHole) =>
+        {
+            if (bulletHole.Surface == door)
+            {
+                PostUpdateCommands.AddComponent(bulletEntity, rotation);
             }
         });
     }
