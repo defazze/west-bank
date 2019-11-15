@@ -7,8 +7,6 @@ using UnityEngine;
 [UpdateAfter(typeof(ShootEngine))]
 public class DoorEngine : ComponentSystem
 {
-    private const float OPEN_PERIOD = 2;
-
     protected override void OnUpdate()
     {
         Entities.WithNone<RotationComponent>().ForEach((Entity e, ref DoorComponent door, ref Translation translation) =>
@@ -24,7 +22,7 @@ public class DoorEngine : ComponentSystem
             if (door.State == DoorState.Open)
             {
                 door.OpenTime += Time.deltaTime;
-                if (door.OpenTime >= OPEN_PERIOD)
+                if (door.OpenTime >= GameManager.Instance.openPeriod)
                 {
                     door.OpenTime = 0;
                     door.State = DoorState.Closing;

@@ -16,6 +16,8 @@ namespace Doors
         public float Distance = 2f;
         public float maxOpenAngle = 270f;
         public float doorRotationSpeed = .7f;
+        public float openPeriod = 2f;
+        public float maxDelayBetweenOpen = 2f;
 
         private EntityManager entityManager;
         void Awake()
