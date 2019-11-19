@@ -1,4 +1,4 @@
-using System.Linq;
+using System.Collections.Generic;
 using Doors;
 using Unity.Collections;
 using Unity.Entities;
@@ -16,29 +16,36 @@ public class DoorsEngine : ComponentSystem
 
     protected override void OnUpdate()
     {
-        /*
         if (_currentDelay == 0)
         {
             _currentDelay = Random.Range(0, GameManager.Instance.maxDelayBetweenOpen);
-            Debug.Log("Delay: " + _currentDelay);
         }
 
         _currentTime += Time.deltaTime;
-        Debug.Log("Current Time: " + _currentTime);
 
         if (_currentTime > _currentDelay)
         {
-            Debug.Log("Select Door");
-            var doors = query.ToComponentDataArray<DoorComponent>(Allocator.TempJob);
+            var closedDoors = new List<Entity>();
 
-            var closedDoors = doors.Where(d => d.State == DoorState.Closed).ToArray();
-            var closedDoorsCount = closedDoors.Length;
+            Entities.ForEach((Entity e, ref DoorComponent doorComponent) =>
+            {
+                if (doorComponent.State == DoorState.Closed)
+                {
+                    closedDoors.Add(e);
+                }
+            });
 
-            var randomDoorIndex = Random.Range(0, closedDoorsCount - 1);
-            closedDoors[randomDoorIndex].State = DoorState.MustOpen;
+            if (closedDoors.Count > 0)
+            {
+                var randomDoorIndex = Random.Range(0, closedDoors.Count - 1);
+                var closedDoor = closedDoors[randomDoorIndex];
+                var closedDoorComponent = EntityManager.GetComponentData<DoorComponent>(closedDoor);
+                closedDoorComponent.State = DoorState.MustOpen;
+                PostUpdateCommands.SetComponent(closedDoor, closedDoorComponent);
+            }
 
             _currentDelay = 0;
             _currentTime = 0;
-        }*/
+        }
     }
 }

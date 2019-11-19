@@ -46,21 +46,16 @@ public class ShootEngine : ComponentSystem
 
                 if (entityManager.HasComponent<DoorComponent>(e))
                 {
-                    var doorPosition = entityManager.GetComponentData<Translation>(e).Value;
-                    var doorRotation = entityManager.GetComponentData<Rotation>(e).Value;
+                    var doorMatrix = (Matrix4x4)entityManager.GetComponentData<LocalToWorld>(e).Value;
 
-                    Matrix4x4 matrix = Matrix4x4.identity;
-                    matrix.SetTRS(doorPosition, doorRotation, new float3(1f, 1f, 1f));
-                    var relativePosition = matrix.inverse.MultiplyPoint3x4(hit.Position);
+                    var bulletHoleMatrix = Matrix4x4.identity;
+                    bulletHoleMatrix.SetTRS(hit.Position, bulletHoleRotation, entityManager.GetComponentData<NonUniformScale>(bulletHole).Value);
 
+                    var transformMatrix = doorMatrix.inverse * bulletHoleMatrix;
 
-                    /*
-                                        var relativePosition = hit.Position - entityManager.GetComponentData<Translation>(e).Value;
-                                        var relativeRotation = Quaternion.Inverse(bulletHoleRotation) * entityManager.GetComponentData<Rotation>(e).Value;
-                    */
-                    //entityManager.SetComponentData(bulletHole, new Rotation { Value = relativeRotation });
-                    entityManager.SetComponentData(bulletHole, new Translation { Value = relativePosition });
-
+                    entityManager.SetComponentData(bulletHole, new Translation { Value = transformMatrix.ExtractPosition() });
+                    entityManager.SetComponentData(bulletHole, new Rotation { Value = transformMatrix.ExtractRotation() });
+                    entityManager.SetComponentData(bulletHole, new NonUniformScale { Value = transformMatrix.ExtractScale() });
                     entityManager.AddComponentData(bulletHole, new Parent { Value = e });
                     entityManager.AddComponent<LocalToParent>(bulletHole);
                 }

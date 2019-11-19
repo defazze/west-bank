@@ -22,9 +22,8 @@ namespace Doors
                 var pivot = rotationComponent.Pivot;
                 var newPosition = math.mul(delta, position - pivot) + pivot;
 
-                translation.Value = newPosition;
-                rotation.Value = newRotation;
-
+                rotationComponent.NewPosition = newPosition;
+                rotationComponent.NewRotation = newRotation;
             });
         }
     }
