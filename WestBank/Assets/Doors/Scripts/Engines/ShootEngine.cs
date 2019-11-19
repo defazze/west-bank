@@ -1,5 +1,6 @@
 using Doors;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
@@ -41,13 +42,32 @@ public class ShootEngine : ComponentSystem
                 var bulletHoleEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(GameManager.Instance.BulletHolePrefab, World.Active);
                 var bulletHole = entityManager.Instantiate(bulletHoleEntity);
 
-                var bulletHoleRotation = new Rotation { Value = Quaternion.FromToRotation(Vector3.back, hit.SurfaceNormal) };
-                entityManager.SetComponentData(bulletHole, bulletHoleRotation);
-                entityManager.SetComponentData(bulletHole, new Translation { Value = hit.Position });
+                var bulletHoleRotation = Quaternion.FromToRotation(Vector3.back, hit.SurfaceNormal);
 
                 if (entityManager.HasComponent<DoorComponent>(e))
                 {
-                    entityManager.AddComponentData(bulletHole, new BulletHoleComponent { Surface = e });
+                    var doorPosition = entityManager.GetComponentData<Translation>(e).Value;
+                    var doorRotation = entityManager.GetComponentData<Rotation>(e).Value;
+
+                    Matrix4x4 matrix = Matrix4x4.identity;
+                    matrix.SetTRS(doorPosition, doorRotation, new float3(1f, 1f, 1f));
+                    var relativePosition = matrix.inverse.MultiplyPoint3x4(hit.Position);
+
+
+                    /*
+                                        var relativePosition = hit.Position - entityManager.GetComponentData<Translation>(e).Value;
+                                        var relativeRotation = Quaternion.Inverse(bulletHoleRotation) * entityManager.GetComponentData<Rotation>(e).Value;
+                    */
+                    //entityManager.SetComponentData(bulletHole, new Rotation { Value = relativeRotation });
+                    entityManager.SetComponentData(bulletHole, new Translation { Value = relativePosition });
+
+                    entityManager.AddComponentData(bulletHole, new Parent { Value = e });
+                    entityManager.AddComponent<LocalToParent>(bulletHole);
+                }
+                else
+                {
+                    entityManager.SetComponentData(bulletHole, new Rotation { Value = bulletHoleRotation });
+                    entityManager.SetComponentData(bulletHole, new Translation { Value = hit.Position });
                 }
             }
         }

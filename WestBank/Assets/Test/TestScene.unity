@@ -327,6 +327,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CubePrefab: {fileID: 3477997155100014156, guid: 70db2f21d0c5b6d41aa8f73f918eac36,
     type: 3}
+  ChildCubePrefab: {fileID: 2801729240324729976, guid: dd1747fa7515b8d72b30e46d289f0ab9,
+    type: 3}
 --- !u!4 &1823436801
 Transform:
   m_ObjectHideFlags: 0

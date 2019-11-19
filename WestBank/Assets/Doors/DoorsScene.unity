@@ -410,7 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DoorPrefab: {fileID: 803058197346754840, guid: 49a030e7648e2f40a9aa4091ac222c0c,
     type: 3}
-  BulletHolePrefab: {fileID: 6476431514152142401, guid: cb426b14d6493a441afe09fc48184cd7,
+  BulletHolePrefab: {fileID: 2375680194907081721, guid: 6681066cb57209d3faa5d25139d349bf,
     type: 3}
   Distance: 1.4
   maxOpenAngle: 270

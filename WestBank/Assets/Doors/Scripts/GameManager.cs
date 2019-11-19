@@ -39,7 +39,7 @@ namespace Doors
                 entityManager.SetComponentData(door, new Translation { Value = position });
                 entityManager.AddComponentData(door, new DoorComponent
                 {
-                    State = DoorState.Closed,
+                    State = DoorState.MustOpen,
                     OpenTime = 0,
                     Pivot = (float3)position + new float3(.5f, 0, 0)
                 });

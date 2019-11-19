@@ -16,6 +16,7 @@ public class DoorsEngine : ComponentSystem
 
     protected override void OnUpdate()
     {
+        /*
         if (_currentDelay == 0)
         {
             _currentDelay = Random.Range(0, GameManager.Instance.maxDelayBetweenOpen);
@@ -30,11 +31,6 @@ public class DoorsEngine : ComponentSystem
             Debug.Log("Select Door");
             var doors = query.ToComponentDataArray<DoorComponent>(Allocator.TempJob);
 
-            /*
-                        for (int i = 0; i < doors.Length; i ++)
-                        {
-
-                        }*/
             var closedDoors = doors.Where(d => d.State == DoorState.Closed).ToArray();
             var closedDoorsCount = closedDoors.Length;
 
@@ -43,6 +39,6 @@ public class DoorsEngine : ComponentSystem
 
             _currentDelay = 0;
             _currentTime = 0;
-        }
+        }*/
     }
 }
