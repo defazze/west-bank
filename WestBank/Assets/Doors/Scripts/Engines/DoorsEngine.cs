@@ -28,7 +28,13 @@ public class DoorsEngine : ComponentSystem
         if (_currentTime > _currentDelay)
         {
             Debug.Log("Select Door");
-            var doors = query.ToComponentDataArray<DoorComponent>(Allocator.Temp);
+            var doors = query.ToComponentDataArray<DoorComponent>(Allocator.TempJob);
+
+            /*
+                        for (int i = 0; i < doors.Length; i ++)
+                        {
+
+                        }*/
             var closedDoors = doors.Where(d => d.State == DoorState.Closed).ToArray();
             var closedDoorsCount = closedDoors.Length;
 
