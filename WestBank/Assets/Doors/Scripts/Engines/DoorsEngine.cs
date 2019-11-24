@@ -8,41 +8,50 @@ public class DoorsEngine : ComponentSystem
 {
     private float _currentDelay = 0;
     private float _currentTime = 0;
-    private EntityQuery query;
+    private EntityQuery _query;
+
+    private Configuration _config;
+
     protected override void OnCreate()
     {
-        query = GetEntityQuery(typeof(DoorComponent));
+        _query = GetEntityQuery(typeof(DoorComponent));
+        _config = GameManager.Instance.configuration;
     }
 
     protected override void OnUpdate()
     {
         if (_currentDelay == 0)
         {
-            _currentDelay = Random.Range(0, GameManager.Instance.maxDelayBetweenOpen);
+            _currentDelay = Random.Range(0, _config.maxDelayBetweenOpen);
         }
 
         _currentTime += Time.deltaTime;
 
         if (_currentTime > _currentDelay)
         {
-            var closedDoors = new List<Entity>();
+            var closedDoorIndexes = new List<int>();
+            var doors = _query.ToComponentDataArray<DoorComponent>(Allocator.TempJob);
 
-            Entities.ForEach((Entity e, ref DoorComponent doorComponent) =>
+            for (int i = 0; i < doors.Length; i++)
             {
-                if (doorComponent.State == DoorState.Closed)
+                if (doors[i].State == DoorState.Closed)
                 {
-                    closedDoors.Add(e);
+                    closedDoorIndexes.Add(i);
                 }
-            });
-
-            if (closedDoors.Count > 0)
-            {
-                var randomDoorIndex = Random.Range(0, closedDoors.Count - 1);
-                var closedDoor = closedDoors[randomDoorIndex];
-                var closedDoorComponent = EntityManager.GetComponentData<DoorComponent>(closedDoor);
-                closedDoorComponent.State = DoorState.MustOpen;
-                PostUpdateCommands.SetComponent(closedDoor, closedDoorComponent);
             }
+
+            if (closedDoorIndexes.Count > 0)
+            {
+                var random = Random.Range(0, closedDoorIndexes.Count - 1);
+                var doorIndex = closedDoorIndexes[random];
+
+                var temp = doors[doorIndex];
+                temp.State = DoorState.MustOpen;
+                doors[doorIndex] = temp;
+                _query.CopyFromComponentDataArray(doors);
+            }
+
+            doors.Dispose();
 
             _currentDelay = 0;
             _currentTime = 0;

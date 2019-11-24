@@ -9,12 +9,18 @@ namespace Doors
     [UpdateAfter(typeof(DoorEngine))]
     public class RotationEngine : ComponentSystem
     {
+        private Configuration _config;
+        protected override void OnCreate()
+        {
+            _config = GameManager.Instance.configuration;
+        }
+
         protected override void OnUpdate()
         {
             Entities.ForEach((ref Translation translation, ref Rotation rotation, ref RotationComponent rotationComponent) =>
             {
                 var direction = rotationComponent.Opening ? -1 : 1;
-                var delta = quaternion.RotateY(direction * GameManager.Instance.doorRotationSpeed * Time.deltaTime);
+                var delta = quaternion.RotateY(direction * _config.doorRotationSpeed * Time.deltaTime);
 
                 quaternion newRotation = math.mul(rotation.Value, delta);
                 var position = translation.Value;

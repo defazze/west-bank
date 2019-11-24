@@ -39,7 +39,7 @@ public class ShootEngine : ComponentSystem
             {
                 Entity e = physicsWorldSystem.PhysicsWorld.Bodies[hit.RigidBodyIndex].Entity;
 
-                var bulletHoleEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(GameManager.Instance.BulletHolePrefab, World.Active);
+                var bulletHoleEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(GameManager.Instance.bulletHolePrefab, World.Active);
                 var bulletHole = entityManager.Instantiate(bulletHoleEntity);
 
                 var bulletHoleRotation = Quaternion.FromToRotation(Vector3.back, hit.SurfaceNormal);

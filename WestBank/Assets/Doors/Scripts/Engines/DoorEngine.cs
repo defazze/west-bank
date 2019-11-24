@@ -1,12 +1,17 @@
 using Doors;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
 [UpdateAfter(typeof(ShootEngine))]
 public class DoorEngine : ComponentSystem
 {
+    private Configuration _config;
+    protected override void OnCreate()
+    {
+        _config = GameManager.Instance.configuration;
+    }
+
     protected override void OnUpdate()
     {
         Entities.WithNone<RotationComponent>().ForEach((Entity e, ref DoorComponent door, ref Translation translation) =>
@@ -20,7 +25,7 @@ public class DoorEngine : ComponentSystem
             if (door.State == DoorState.Open)
             {
                 door.OpenTime += Time.deltaTime;
-                if (door.OpenTime >= GameManager.Instance.openPeriod)
+                if (door.OpenTime >= _config.openPeriod)
                 {
                     door.OpenTime = 0;
                     door.State = DoorState.Closing;
@@ -34,7 +39,7 @@ public class DoorEngine : ComponentSystem
         {
             var angle = ((Quaternion)rotationComponent.NewRotation).eulerAngles.y;
 
-            if (angle > 0 && angle < GameManager.Instance.maxOpenAngle)
+            if (angle > 0 && angle < _config.maxOpenAngle)
             {
                 if (door.State == DoorState.Opening)
                 {
