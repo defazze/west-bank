@@ -10,4 +10,14 @@ public class Configuration : ScriptableObject
     public float doorRotationSpeed = .7f;
     public float openPeriod = 2f;
     public float maxDelayBetweenOpen = 2f;
+
+    [SerializeField]
+    public Prefabs prefabs = new Prefabs();
+}
+
+[System.Serializable]
+public class Prefabs
+{
+    public GameObject regular;
+    public GameObject bandit;
 }

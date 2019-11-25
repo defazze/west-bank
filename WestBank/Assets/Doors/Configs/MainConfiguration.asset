@@ -18,3 +18,7 @@ MonoBehaviour:
   doorRotationSpeed: 0.7
   openPeriod: 2
   maxDelayBetweenOpen: 2
+  prefabs:
+    regular: {fileID: 3336607213009068944, guid: 27b8144c6c53808b792ef87d0c282190,
+      type: 3}
+    bandit: {fileID: 350972587422548084, guid: 1ea5da08e1db58ca19492eca1d02cfb6, type: 3}
