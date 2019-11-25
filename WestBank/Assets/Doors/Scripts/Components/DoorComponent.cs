@@ -8,6 +8,7 @@ namespace Doors
         public DoorState State;
         public float OpenTime;
         public float3 Pivot;
+        public Entity Person;
     }
 
     public enum DoorState

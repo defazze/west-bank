@@ -64,6 +64,12 @@ public class ShootEngine : ComponentSystem
                     entityManager.SetComponentData(bulletHole, new Rotation { Value = bulletHoleRotation });
                     entityManager.SetComponentData(bulletHole, new Translation { Value = hit.Position });
                 }
+
+                if (entityManager.HasComponent<PersonComponent>(e))
+                {
+                    var buffer = entityManager.GetBuffer<LinkedEntityGroup>(e);
+                    buffer.Add(bulletHole);
+                }
             }
         }
     }

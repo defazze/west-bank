@@ -1,5 +1,6 @@
 using Doors;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -7,9 +8,11 @@ using UnityEngine;
 public class DoorEngine : ComponentSystem
 {
     private Configuration _config;
+    private Entity _personEntity;
     protected override void OnCreate()
     {
         _config = GameManager.Instance.configuration;
+        _personEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(_config.prefabs.regular, World.Active);
     }
 
     protected override void OnUpdate()
@@ -20,6 +23,7 @@ public class DoorEngine : ComponentSystem
             {
                 door.State = DoorState.Opening;
                 PostUpdateCommands.AddComponent(e, new RotationComponent { Opening = true, Pivot = door.Pivot });
+                PostUpdateCommands.AddComponent<CreatePerson>(e);
             }
 
             if (door.State == DoorState.Open)
@@ -49,6 +53,11 @@ public class DoorEngine : ComponentSystem
                 if (door.State == DoorState.Closing)
                 {
                     door.State = DoorState.Closed;
+
+                    if (EntityManager.Exists(door.Person))
+                    {
+                        PostUpdateCommands.AddComponent<DestroyPerson>(door.Person);
+                    }
                 }
 
                 PostUpdateCommands.RemoveComponent<RotationComponent>(e);
