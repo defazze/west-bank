@@ -69,6 +69,8 @@ public class ShootEngine : ComponentSystem
                 {
                     var buffer = entityManager.GetBuffer<LinkedEntityGroup>(e);
                     buffer.Add(bulletHole);
+
+                    entityManager.AddComponent<DestroyPerson>(e);
                 }
             }
         }
