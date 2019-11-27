@@ -72,6 +72,11 @@ public class ShootEngine : ComponentSystem
 
                     entityManager.AddComponent<DestroyPerson>(e);
                 }
+
+                Entities.ForEach((ref ShootCountComponent shootCount) =>
+                {
+                    shootCount.Value++;
+                });
             }
         }
     }

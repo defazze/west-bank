@@ -15,8 +15,8 @@ MonoBehaviour:
   distanceBetweenDoors: 0.2
   doorWidth: 1.2
   maxOpenAngle: 270
-  doorRotationSpeed: 0.7
-  openPeriod: 2
+  doorRotationSpeed: 0.92
+  openPeriod: 1.44
   maxDelayBetweenOpen: 2
   prefabs:
     regular: {fileID: 3336607213009068944, guid: 27b8144c6c53808b792ef87d0c282190,

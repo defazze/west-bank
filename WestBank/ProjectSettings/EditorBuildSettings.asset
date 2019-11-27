@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Doors/DoorsScene.unity
+    guid: d86f1ace231df63cab9ce0aba70d603a
   m_configObjects: {}
