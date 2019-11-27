@@ -9,14 +9,12 @@ namespace Doors
     [UpdateAfter(typeof(DoorEngine))]
     public class RotationEngine : ComponentSystem
     {
-        private Configuration _config;
-        protected override void OnCreate()
-        {
-            _config = GameManager.Instance.configuration;
-        }
+        private ConfigData _config;
 
         protected override void OnUpdate()
         {
+            _config = GetSingleton<ConfigData>();
+
             Entities.ForEach((ref Translation translation, ref Rotation rotation, ref RotationComponent rotationComponent) =>
             {
                 var direction = rotationComponent.Opening ? -1 : 1;

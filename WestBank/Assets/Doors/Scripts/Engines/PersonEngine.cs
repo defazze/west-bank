@@ -5,18 +5,16 @@ using Unity.Transforms;
 
 public class PersonEngine : ComponentSystem
 {
-    private Configuration _config;
+    private ConfigData _config;
     private Entity _regularEntity;
     private Entity _banditEntity;
-    protected override void OnCreate()
-    {
-        _config = GameManager.Instance.configuration;
-        _regularEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(_config.prefabs.regular, World.Active);
-        _banditEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(_config.prefabs.bandit, World.Active);
-    }
 
     protected override void OnUpdate()
     {
+        _config = GetSingleton<ConfigData>();
+        _regularEntity = _config.regular;
+        _banditEntity = _config.bandit;
+
         Entities.WithAll<CreatePerson>().ForEach((Entity e, ref Translation translation, ref DoorComponent door) =>
         {
             var random = UnityEngine.Random.Range(0, 2);

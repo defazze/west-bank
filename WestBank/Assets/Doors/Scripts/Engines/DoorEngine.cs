@@ -7,16 +7,12 @@ using UnityEngine;
 [UpdateAfter(typeof(ShootEngine))]
 public class DoorEngine : ComponentSystem
 {
-    private Configuration _config;
-    private Entity _personEntity;
-    protected override void OnCreate()
-    {
-        _config = GameManager.Instance.configuration;
-        _personEntity = GameObjectConversionUtility.ConvertGameObjectHierarchy(_config.prefabs.regular, World.Active);
-    }
+    private ConfigData _config;
 
     protected override void OnUpdate()
     {
+        _config = GetSingleton<ConfigData>();
+
         Entities.WithNone<RotationComponent>().ForEach((Entity e, ref DoorComponent door, ref Translation translation) =>
         {
             if (door.State == DoorState.MustOpen)

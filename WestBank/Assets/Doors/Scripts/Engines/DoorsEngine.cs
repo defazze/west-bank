@@ -10,16 +10,17 @@ public class DoorsEngine : ComponentSystem
     private float _currentTime = 0;
     private EntityQuery _query;
 
-    private Configuration _config;
+    private ConfigData _config;
 
     protected override void OnCreate()
     {
         _query = GetEntityQuery(typeof(DoorComponent));
-        _config = GameManager.Instance.configuration;
+
     }
 
     protected override void OnUpdate()
     {
+        _config = GetSingleton<ConfigData>();
         if (_currentDelay == 0)
         {
             _currentDelay = Random.Range(0, _config.maxDelayBetweenOpen);
