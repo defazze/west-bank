@@ -35,7 +35,7 @@ public class DoorsEngine : ComponentSystem
 
             for (int i = 0; i < doors.Length; i++)
             {
-                if (doors[i].State == DoorState.Closed)
+                if (doors[i].state == DoorState.Closed)
                 {
                     closedDoorIndexes.Add(i);
                 }
@@ -47,7 +47,7 @@ public class DoorsEngine : ComponentSystem
                 var doorIndex = closedDoorIndexes[random];
 
                 var temp = doors[doorIndex];
-                temp.State = DoorState.MustOpen;
+                temp.state = DoorState.MustOpen;
                 doors[doorIndex] = temp;
                 _query.CopyFromComponentDataArray(doors);
             }

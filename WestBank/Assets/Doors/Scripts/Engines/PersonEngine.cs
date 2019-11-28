@@ -21,9 +21,10 @@ public class PersonEngine : ComponentSystem
             var person = EntityManager.Instantiate(random == 0 ? _regularEntity : _banditEntity);
             EntityManager.AddBuffer<LinkedEntityGroup>(person);
 
-            door.Person = person;
+            door.person = person;
+
             PostUpdateCommands.AddComponent(person, new PersonComponent());
-            PostUpdateCommands.SetComponent(person, new Translation { Value = new float3(translation.Value.x, .7f, .6f) });
+            PostUpdateCommands.SetComponent(person, new Translation { Value = new float3(translation.Value.x + door.personXOffset, .7f, .6f) });
             PostUpdateCommands.SetComponent(e, door);
             PostUpdateCommands.RemoveComponent<CreatePerson>(e);
         });

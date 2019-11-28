@@ -15,22 +15,22 @@ public class DoorEngine : ComponentSystem
 
         Entities.WithNone<RotationComponent>().ForEach((Entity e, ref DoorComponent door, ref Translation translation) =>
         {
-            if (door.State == DoorState.MustOpen)
+            if (door.state == DoorState.MustOpen)
             {
-                door.State = DoorState.Opening;
-                PostUpdateCommands.AddComponent(e, new RotationComponent { Opening = true, Pivot = door.Pivot });
+                door.state = DoorState.Opening;
+                PostUpdateCommands.AddComponent(e, new RotationComponent { Opening = true, Pivot = door.pivot });
                 PostUpdateCommands.AddComponent<CreatePerson>(e);
             }
 
-            if (door.State == DoorState.Open)
+            if (door.state == DoorState.Open)
             {
-                door.OpenTime += Time.deltaTime;
-                if (door.OpenTime >= _config.openPeriod)
+                door.openTime += Time.deltaTime;
+                if (door.openTime >= _config.openPeriod)
                 {
-                    door.OpenTime = 0;
-                    door.State = DoorState.Closing;
+                    door.openTime = 0;
+                    door.state = DoorState.Closing;
 
-                    PostUpdateCommands.AddComponent(e, new RotationComponent { Opening = false, Pivot = door.Pivot });
+                    PostUpdateCommands.AddComponent(e, new RotationComponent { Opening = false, Pivot = door.pivot });
                 }
             }
         });
@@ -41,18 +41,18 @@ public class DoorEngine : ComponentSystem
 
             if (angle > 0 && angle < _config.maxOpenAngle)
             {
-                if (door.State == DoorState.Opening)
+                if (door.state == DoorState.Opening)
                 {
-                    door.State = DoorState.Open;
+                    door.state = DoorState.Open;
                 }
 
-                if (door.State == DoorState.Closing)
+                if (door.state == DoorState.Closing)
                 {
-                    door.State = DoorState.Closed;
+                    door.state = DoorState.Closed;
 
-                    if (EntityManager.Exists(door.Person))
+                    if (EntityManager.Exists(door.person))
                     {
-                        PostUpdateCommands.AddComponent<DestroyPerson>(door.Person);
+                        PostUpdateCommands.AddComponent<DestroyPerson>(door.person);
                     }
                 }
 

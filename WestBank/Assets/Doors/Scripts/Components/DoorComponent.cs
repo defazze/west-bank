@@ -5,10 +5,12 @@ namespace Doors
 {
     public struct DoorComponent : IComponentData
     {
-        public DoorState State;
-        public float OpenTime;
-        public float3 Pivot;
-        public Entity Person;
+        public DoorState state;
+        public float openTime;
+        public float3 pivot;
+        public Entity person;
+        public float personXOffset;
+        public float personRotation;
     }
 
     public enum DoorState

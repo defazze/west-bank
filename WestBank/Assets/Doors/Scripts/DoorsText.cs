@@ -13,7 +13,7 @@ public class DoorsText : MonoBehaviour
 
         var text = entityManager.CreateEntity();
         entityManager.AddComponent<ShootCountComponent>(text);
-        entityManager.AddComponentObject(text, GetComponent<Text>());
+        //entityManager.AddComponentObject(text, GetComponent<Text>());
     }
 }
 
